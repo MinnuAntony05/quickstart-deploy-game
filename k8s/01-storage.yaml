@@ -6,7 +6,7 @@ metadata:
 spec:
   accessModes:
     - ReadWriteOnce
-  storageClassName: standard-rwo # GKE standard block storage
+  storageClassName: premium-rwo # GKE Autopilot requires premium-rwo
   resources:
     requests:
       storage: 10Gi
