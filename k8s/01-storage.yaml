@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: game-data-pvc
+  namespace: game-2048
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: standard # Minikube default storage class
+  resources:
+    requests:
+      storage: 1Gi # Reduced for local development

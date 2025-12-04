@@ -1,0 +1,3 @@
+# ManagedCertificate is GKE-specific and not needed for Minikube
+# For local development, SSL/TLS is typically not required
+# This file can be kept empty or removed when deploying to Minikube

@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: game-2048
+  name: service-2048
+spec:
+  selector:
+    app.kubernetes.io/name: app-2048
+  type: NodePort # NodePort for Minikube access
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
+      nodePort: 30080 # Fixed port for easy access
