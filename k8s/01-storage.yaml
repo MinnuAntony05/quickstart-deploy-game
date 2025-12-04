@@ -6,7 +6,7 @@ metadata:
 spec:
   accessModes:
     - ReadWriteOnce
-  storageClassName: standard # Minikube default storage class
+  storageClassName: standard-rwo # GKE standard block storage
   resources:
     requests:
-      storage: 1Gi # Reduced for local development
+      storage: 10Gi

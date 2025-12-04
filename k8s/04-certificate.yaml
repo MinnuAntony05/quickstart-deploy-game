@@ -1,3 +1,8 @@
-# ManagedCertificate is GKE-specific and not needed for Minikube
-# For local development, SSL/TLS is typically not required
-# This file can be kept empty or removed when deploying to Minikube
+apiVersion: networking.gke.io/v1
+kind: ManagedCertificate
+metadata:
+  name: game-ssl-cert
+  namespace: game-2048
+spec:
+  domains:
+    - games-ai-gcp.ustpace.com

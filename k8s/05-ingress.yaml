@@ -4,11 +4,13 @@ metadata:
   name: ingress-2048
   namespace: game-2048
   annotations:
-    nginx.ingress.kubernetes.io/rewrite-target: /
+    kubernetes.io/ingress.class: "gce"
+    kubernetes.io/ingress.global-static-ip-name: "game-2048-ip"
+    networking.gke.io/managed-certificates: "game-ssl-cert"
+    kubernetes.io/ingress.allow-http: "true"
 spec:
-  ingressClassName: nginx # Use nginx ingress controller for Minikube
   rules:
-    - host: game-2048.local # Local hostname
+    - host: games-ai-gcp.ustpace.com
       http:
         paths:
           - path: /

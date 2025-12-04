@@ -4,7 +4,7 @@ metadata:
   namespace: game-2048
   name: deployment-2048
 spec:
-  replicas: 1 # Reduced for Minikube
+  replicas: 3 # Production replica count for high availability
   selector:
     matchLabels:
       app.kubernetes.io/name: app-2048
