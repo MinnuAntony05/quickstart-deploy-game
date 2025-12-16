@@ -4,7 +4,7 @@ metadata:
   namespace: game-2048
   name: deployment-2048
 spec:
-  replicas: 3 # Production replica count for high availability
+  replicas: 2
   selector:
     matchLabels:
       app.kubernetes.io/name: app-2048

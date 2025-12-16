@@ -1,12 +1,38 @@
+---
+# StorageClass for premium SSD persistent disks (GKE Autopilot)
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: premium-rwo-retain
+provisioner: pd.csi.storage.gke.io
+parameters:
+  type: pd-balanced # pd-ssd for better performance or pd-balanced for cost-effective
+  replication-type: regional-pd # Regional for high availability across zones
+volumeBindingMode: WaitForFirstConsumer
+allowVolumeExpansion: true
+reclaimPolicy: Retain # Retain data even after PVC deletion (enterprise safety)
+
+---
+# PersistentVolumeClaim for game data
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: game-data-pvc
   namespace: game-2048
+  labels:
+    app.kubernetes.io/name: app-2048
+    app.kubernetes.io/component: storage
+    app.kubernetes.io/part-of: game-2048
+  annotations:
+    # Volume snapshot for backup (if needed)
+    snapshot.storage.kubernetes.io/allow-volume-expansion: "true"
 spec:
   accessModes:
     - ReadWriteOnce
-  storageClassName: premium-rwo # GKE Autopilot requires premium-rwo
+  storageClassName: premium-rwo # GKE Autopilot premium storage
   resources:
     requests:
       storage: 10Gi
+  # Resource labels for monitoring and cost allocation
+  selector:
+    matchLabels: {}

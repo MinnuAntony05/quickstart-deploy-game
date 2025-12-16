@@ -1,8 +1,91 @@
-apiVersion: networking.gke.io/v1
-kind: ManagedCertificate
+---
+# ClusterIssuer for Let's Encrypt Production (apply once per cluster)
+apiVersion: cert-manager.io/v1
+kind: ClusterIssuer
+metadata:
+  name: letsencrypt-prod
+spec:
+  acme:
+    # The ACME server URL for Let's Encrypt production
+    server: https://acme-v02.api.letsencrypt.org/directory
+    
+    # Email address for ACME registration and certificate expiry notifications
+    # IMPORTANT: Replace with your actual email address
+    #email: your-email@ustpace.com
+    
+    # Name of a secret used to store the ACME account private key
+    privateKeySecretRef:
+      name: letsencrypt-prod-key
+    
+    # Enable the HTTP-01 challenge provider
+    solvers:
+      - http01:
+          ingress:
+            class: nginx
+
+---
+# ClusterIssuer for Let's Encrypt Staging (for testing)
+apiVersion: cert-manager.io/v1
+kind: ClusterIssuer
+metadata:
+  name: letsencrypt-staging
+spec:
+  acme:
+    # The ACME server URL for Let's Encrypt staging
+    server: https://acme-staging-v02.api.letsencrypt.org/directory
+    
+    # Email address for ACME registration
+    email: your-email@ustpace.com
+    
+    # Name of a secret used to store the ACME account private key
+    privateKeySecretRef:
+      name: letsencrypt-staging-key
+    
+    # Enable the HTTP-01 challenge provider
+    solvers:
+      - http01:
+          ingress:
+            class: nginx
+
+---
+# Certificate resource (managed by cert-manager)
+apiVersion: cert-manager.io/v1
+kind: Certificate
 metadata:
   name: game-ssl-cert
   namespace: game-2048
 spec:
-  domains:
+  # Secret name where the certificate will be stored
+  secretName: game-2048-tls-secret
+  
+  # Certificate renewal time (default: 30 days before expiry)
+  renewBefore: 720h # 30 days
+  
+  # Certificate duration (Let's Encrypt issues 90-day certificates)
+  duration: 2160h # 90 days
+  
+  # Certificate issuer reference
+  issuerRef:
+    name: letsencrypt-prod
+    kind: ClusterIssuer
+    group: cert-manager.io
+  
+  # Common name for the certificate
+  commonName: games-ai-gcp.ustpace.com
+  
+  # DNS names to be included in the certificate
+  dnsNames:
     - games-ai-gcp.ustpace.com
+  
+  # Private key configuration
+  privateKey:
+    algorithm: RSA
+    encoding: PKCS1
+    size: 2048
+    rotationPolicy: Always
+  
+  # Usages for the certificate
+  usages:
+    - digital signature
+    - key encipherment
+    - server auth
