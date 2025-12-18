@@ -1,5 +1,5 @@
 ---
-# StorageClass for premium SSD persistent disks (GKE Autopilot)
+# StorageClass for premium SSD persistent disks (GKE Standard)
 apiVersion: storage.k8s.io/v1
 kind: StorageClass
 metadata:
@@ -29,10 +29,7 @@ metadata:
 spec:
   accessModes:
     - ReadWriteOnce
-  storageClassName: premium-rwo # GKE Autopilot premium storage
+  storageClassName: premium-rwo-retain # GKE Standard premium storage
   resources:
     requests:
       storage: 10Gi
-  # Resource labels for monitoring and cost allocation
-  selector:
-    matchLabels: {}
